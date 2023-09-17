@@ -107,7 +107,7 @@ end)
 RegisterNetEvent('eraoutfits:client:ChangeHairs')
 AddEventHandler('eraoutfits:client:ChangeHairs', function(actualHair, althair, basehair)
     local playerPed = GetPlayerPed(-1)
-    --QBCore.Functions.Notify("hair" .. althair .. basehair, 'error') -- Debug Notify
+
 
     if actualHair == basehair then
         SetPedComponentVariation(playerPed, 2, althair, 0, 0)

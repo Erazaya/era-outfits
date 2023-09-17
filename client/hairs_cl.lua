@@ -24,7 +24,7 @@ AddEventHandler('eraoutfits:client:ReceiveHairData', function(althair, basehair)
             isMenuHeader = true 
         },
         {
-            header = 'Sauvegarder Coupe 1',
+            header = 'Save Haircut 1',
             txt = 'Saved : ' .. basehair,
             icon = 'fas fa-code-merge',
             params = {
@@ -36,7 +36,7 @@ AddEventHandler('eraoutfits:client:ReceiveHairData', function(althair, basehair)
             }
         },  
         {
-            header = 'Sauvegarder Coupe 2',
+            header = 'Save Haircut 2',
             txt = 'Saved : ' .. althair,
             icon = 'fas fa-code-merge',
             params = {

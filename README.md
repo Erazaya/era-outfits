@@ -401,3 +401,7 @@ Switching Clothes timing can be changed in clothing_cl.lua at function GetSwitch
 Switching Animations can be changed in clothing_cl.lua at function GetSwitchAnim
 
 If you dont want Alternative Hairs for any reason, you can remove them by removing the lines in qb-radialmenu.
+
+
+# Donations
+[![kofi](https://user-images.githubusercontent.com/7586345/125668092-55af2a45-aa7d-4795-93ed-de0a9a2828c5.png)](https://ko-fi.com/erazaya)

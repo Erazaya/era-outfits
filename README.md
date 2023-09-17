@@ -324,7 +324,7 @@ in html > js > app.js, near line 631 at FormatItemInfo, add this :
                 itemData.info.color +
                 "</span></p>"
             );
-        } else if (itemData.name == "era_pant") {
+        } else if (itemData.name == "era_pants") {
             $(".item-info-title").html('<p>Pants</p>');
             $(".item-info-description").html(
                 "<p><strong>ID : </strong><span>" +

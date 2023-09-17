@@ -1,4 +1,4 @@
-# era-clothes
+# era-outfits
 Clothing in Inventory for QB-Core, featuring outfit management and alternatives haircuts for your players
 
 

@@ -1,13 +1,13 @@
 # era-outfits
 Clothing in Inventory for QB-Core, featuring outfit management and alternatives haircuts for your players
 
-
+Requirements : [ox_lib](https://github.com/overextended/ox_lib), any qb-inventory, qb-radialmenu, illenium-appaerance (optional) 
 
 # Installation
 
 Install and ensure era-outfits in your server.cfg like any scripts.
 
-1.**load `playerhairs.sql` in your database to use**
+1.**load `playerhairs.sql` in your database**
 
 2. **Go to qb-radialmenu config.lua and copy over line 170 to line 298 :**
 

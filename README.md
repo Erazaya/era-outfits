@@ -395,7 +395,7 @@ in html > js > app.js, near line 631 at FormatItemInfo, add this :
 **Era-Outfits should work fine now. Please be aware this is a learning project, im not an actual dev, this should be full of beginners errors. Have fun !**
 
 
-**Configuration**
+# **Configuration**
 Switching Clothes timing can be changed in clothing_cl.lua at function GetSwitchTime
 
 Switching Animations can be changed in clothing_cl.lua at function GetSwitchAnim

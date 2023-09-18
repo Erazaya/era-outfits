@@ -212,6 +212,8 @@ local ItemData = {}
                 anim = usedAnim,
             }) then
                 if type == "pant" then
+                    QBCore.Functions.Notify(id, 'success')
+                    QBCore.Functions.Notify(color, 'success')
                     TriggerServerEvent('eraoutfits:server:receiveclothes', type, id, color)
 
                     if playerGender == "female" then

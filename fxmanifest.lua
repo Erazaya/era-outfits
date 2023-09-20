@@ -5,9 +5,9 @@ description 'Erazaya Clothing'
 
 author 'Erazaya'
 
-shared_scripts {
-    'config.lua',
-}
+-- shared_scripts {
+--     'config.lua',
+-- }
 
 
 client_scripts {

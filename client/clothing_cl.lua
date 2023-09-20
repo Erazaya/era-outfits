@@ -796,7 +796,7 @@ local ItemData = {}
     RegisterNetEvent('eraoutfits:client:hat')
     AddEventHandler('eraoutfits:client:hat', function()
         local playerPed = PlayerPedId()
-        local hatID = GetPedPropIndex(playerPed, 1) 
+        local hatID = GetPedPropIndex(playerPed, 0) 
         local playerGender = GetPlayerGender()
     
         if lib.progressActive() then

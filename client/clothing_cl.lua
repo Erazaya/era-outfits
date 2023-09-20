@@ -13,11 +13,12 @@ local ItemData = {}
     }
 
     function IsCloth(type)
-        for _, clothType in ipairs(clothslot) do
-            if clothType == type then
+        for clothType = 1, #clothslot do
+            if clothslot[clothType] == type then
                 return true
             end
         end
+
         return false
     end
 
@@ -30,58 +31,47 @@ local ItemData = {}
     }
     
     function IsProps(type)
-        for _, propType in ipairs(propslot) do
-            if propType == type then
+        for propType = 1, #propslot do
+            if propslot[propType] == type then
                 return true
             end
         end
+
         return false
     end
 
-    function GetClothSlot(type)
+    local ClothSlots = {
+        ["kevlar"] = 9,
+        ["shoes"] = 6,
+        ["chains"] = 7,
+        ["decals"] = 10,
+        ["mask"] = 1,
+        ["pant"] = 4,
+        ["bags"] = 5,
+        ["shirt"] = 8,
+        ["top"] = 11,
+        ["gloves"] = 3
+    }
 
-        if type == "kevlar" then
-            return 9
-        elseif type == "shoes" then
-            return 6
-        elseif type == "chains" then
-            return 7
-        elseif type == "decals" then
-            return 10
-        elseif type == "mask" then
-            return 1
-        elseif type == "pant" then
-            return 4
-        elseif type == "bags" then
-            return 5
-        elseif type == "shirt" then
-            return 8
-        elseif type == "top" then
-            return 11
-        elseif type == "gloves" then
-            return 3
-        end
-
+    function GetClothSlot(clothType)
+        return ClothSlots[clothType]
     end
 
-    function GetPropSlot(type)
+    local PropSlots = {
+        ["hat"] = 0,
+        ["bracelet"] = 7,
+        ["watch"] = 6,
+        ["glasses"] = 1,
+        ["ears"] = 2
+    }
 
-        if type == "hat" then
-            return 0
-        elseif type == "bracelet" then
-            return 7
-        elseif type == "watch" then
-            return 6
-        elseif type == "glasses" then
-            return 1
-        elseif type == "ears" then
-            return 2
-        end
+    function GetPropSlot(clothType)
+        return PropSlots[clothType]
     end
 
     function GetClothID(type)
         local slot = GetClothSlot(type)
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
 
         if type == "outfit" then
         return
@@ -96,7 +86,7 @@ local ItemData = {}
 
     function GetClothColor(type)
         local slot = GetClothSlot(type)
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
 
         if type == "outfit" then
         return
@@ -111,7 +101,7 @@ local ItemData = {}
 
     function GetPropsID(type)
         local slot = GetPropSlot(type)
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
 
         if slot then
             local id  = GetPedPropIndex(playerPed, slot)
@@ -123,7 +113,7 @@ local ItemData = {}
 
     function GetPropsColor(type)
         local slot = GetPropSlot(type)
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
 
         if slot then
             local color = GetPedPropTextureIndex(playerPed, slot)
@@ -169,9 +159,9 @@ local ItemData = {}
         end
     end
 
-    function GetPlayerGender(source)
+    function GetPlayerGender()
     
-            local playerPed = GetPlayerPed(-1)
+            local playerPed = PlayerPedId()
             local genderHash = GetEntityModel(playerPed)
 
         if genderHash == GetHashKey("mp_f_freemode_01") then
@@ -184,7 +174,7 @@ local ItemData = {}
     end
 
     function SetPlayerInUnderwear(type)
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
         local playerGender = GetPlayerGender(source)
         local usedAnim = GetSwitchAnim(type)
         local SwitchTime = GetSwitchTime(type)
@@ -325,7 +315,7 @@ local ItemData = {}
     end
 
     function RemoveAll(class)
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
         local playerGender = GetPlayerGender(source)
 
         if lib.progressActive() then
@@ -366,7 +356,7 @@ local ItemData = {}
             end
     end
     function IsPlayerInUnderwear(type)
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
         local playerGender = GetPlayerGender(source)
         local slot = GetClothSlot(type)
     
@@ -443,7 +433,7 @@ local ItemData = {}
 
     function RemovePlayerProps(type)
             local source = source
-            local playerPed = GetPlayerPed(-1)
+            local playerPed = PlayerPedId()
             local playerGender = GetPlayerGender(source)
             local usedAnim = GetSwitchAnim(type)
             local SwitchTime = GetSwitchTime(type)
@@ -487,7 +477,7 @@ local ItemData = {}
     RegisterNetEvent('eraoutfits:client:switch')
     AddEventHandler('eraoutfits:client:switch', function(type, ItemData)
         local source = source
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
         local playerGender = GetPlayerGender(source)
         local usedAnim = GetSwitchAnim(type)
         local SwitchTime = GetSwitchTime(type)
@@ -753,7 +743,7 @@ local ItemData = {}
 
     RegisterNetEvent('eraoutfits:client:glasses')
     AddEventHandler('eraoutfits:client:glasses', function()
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
         local glassesID = GetPedPropIndex(playerPed, 1)
         local playerGender = GetPlayerGender()
     
@@ -770,7 +760,7 @@ local ItemData = {}
 
     RegisterNetEvent('eraoutfits:client:watch')
     AddEventHandler('eraoutfits:client:watch', function()
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
         local watchID = GetPedPropIndex(playerPed, 6)
  
         local playerGender = GetPlayerGender()
@@ -788,7 +778,7 @@ local ItemData = {}
 
     RegisterNetEvent('eraoutfits:client:bracelet')
     AddEventHandler('eraoutfits:client:bracelet', function()
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
         local braceletID = GetPedPropIndex(playerPed, 7) 
         local playerGender = GetPlayerGender()
     
@@ -805,7 +795,7 @@ local ItemData = {}
 
     RegisterNetEvent('eraoutfits:client:hat')
     AddEventHandler('eraoutfits:client:hat', function()
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
         local hatID = GetPedPropIndex(playerPed, 1) 
         local playerGender = GetPlayerGender()
     
@@ -823,7 +813,7 @@ local ItemData = {}
 
     RegisterNetEvent('eraoutfits:client:ears')
     AddEventHandler('eraoutfits:client:ears', function()
-        local playerPed = GetPlayerPed(-1)
+        local playerPed = PlayerPedId()
         local playerGender = GetPlayerGender() 
         local earsID = GetPedPropIndex(playerPed, 2) 
 

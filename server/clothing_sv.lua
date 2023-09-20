@@ -276,7 +276,12 @@ QBCore.Functions.CreateUseableItem("era_outfit", function(source, item)
     Player.Functions.RemoveItem(item.name, 1, item.slot)
 end)
 
+local DifferentItems = {
+    ['pant'] = "era_pants",
+    ['bags'] = "era_para",
+    ['decals'] = "era_decal",
 
+}
 
 RegisterNetEvent('eraoutfits:server:receiveclothes')
 AddEventHandler('eraoutfits:server:receiveclothes', function(type, ID, Color)
@@ -285,31 +290,12 @@ AddEventHandler('eraoutfits:server:receiveclothes', function(type, ID, Color)
     info.id = ID
     info.color = Color
 
-    if type == "pant" then
-        item = "era_pants"
-    elseif type == "chains" then
-        item = "era_chains"
-    elseif type == "mask" then
-        item = "era_mask"
-    elseif type == "bags" then
-        item = "era_para"
-    elseif type == "shoes" then
-        item = "era_shoes"
-    elseif type == "decals" then
-        item = "era_decal"
-    elseif type == "kevlar" then
-        item = "era_kevlar"
-    elseif type == "watch" then
-        item = "era_watch"
-    elseif type == "bracelet" then
-        item = "era_bracelet"
-    elseif type == "glasses" then
-        item = "era_glasses"
-    elseif type == "hat" then
-        item = "era_hat"
-    elseif type == "ears" then
-        item = "era_ears"
+    if DifferentItems[type] then
+        item = DifferentItems[type]
+    else
+        item = "era_"..type
     end
+
     if item then
         Player.Functions.AddItem(item, 1, nil, info)
         TriggerClientEvent("inventory:client:ItemBox", source, QBCore.Shared.Items[item], "add")

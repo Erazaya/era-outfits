@@ -19,13 +19,13 @@ AddEventHandler('eraoutfits:client:ReceiveHairData', function(althair, basehair)
 
     exports['qb-menu']:openMenu({
         {
-            header = 'Manage Hairs',
+            header = Locales.hair.manage,
             icon = 'fas fa-code',
             isMenuHeader = true 
         },
         {
-            header = 'Save Haircut 1',
-            txt = 'Saved : ' .. basehair,
+            header = Locales.hair.save1,
+            txt = Locales.hair.actual .. basehair,
             icon = 'fas fa-code-merge',
             params = {
                 isServer = false,
@@ -36,8 +36,8 @@ AddEventHandler('eraoutfits:client:ReceiveHairData', function(althair, basehair)
             }
         },  
         {
-            header = 'Save Haircut 2',
-            txt = 'Saved : ' .. althair,
+            header = Locales.hair.save2,
+            txt = Locales.hair.actual .. althair,
             icon = 'fas fa-code-merge',
             params = {
                 isServer = false,
@@ -55,13 +55,13 @@ AddEventHandler('eraoutfits:client:ReceiveNullHairData', function(althair, baseh
 
     exports['qb-menu']:openMenu({
         {
-            header = 'Manage Haircuts',
+            header = Locales.hair.manage,
             icon = 'fas fa-code',
             isMenuHeader = true --
         },
         {
-            header = 'Save Haircut 1',
-            txt = 'Saved : None',
+            header = Locales.hair.save1,
+            txt = Locales.hair.actual..' None',
             icon = 'fas fa-code-merge',
             params = {
                 isServer = false,
@@ -72,8 +72,8 @@ AddEventHandler('eraoutfits:client:ReceiveNullHairData', function(althair, baseh
             }
         },  
         {
-            header = 'Save Haircut 2',
-            txt = 'Saved : None',
+            header = Locales.hair.save1,
+            txt = Locales.hair.actual..' None',
             icon = 'fas fa-code-merge',
             params = {
                 isServer = false,
@@ -114,7 +114,7 @@ AddEventHandler('eraoutfits:client:ChangeHairs', function(actualHair, althair, b
     elseif actualHair == althair then 
         SetPedComponentVariation(playerPed, 2, basehair, 0, 0 ) 
         if actualHair ~= althair and actualHair ~= basehair then
-            QBCore.Functions.Notify("Save your haircuts before switching !", 'error')
+            QBCore.Functions.Notify(Locales.hair.nohaircut, 'error')
         end
     end
 end)

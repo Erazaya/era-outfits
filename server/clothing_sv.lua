@@ -23,9 +23,9 @@ QBCore.Functions.CreateUseableItem("era_pants", function(source, item)
     local progressActive = lib.callback.await('eraoutfits:IsProgressActive', source)
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -41,9 +41,9 @@ QBCore.Functions.CreateUseableItem("era_top", function(source, item)
     local progressActive = lib.callback.await('eraoutfits:IsProgressActive', source)
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -59,9 +59,9 @@ QBCore.Functions.CreateUseableItem("era_chains", function(source, item)
     local progressActive = lib.callback.await('eraoutfits:IsProgressActive', source)
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -77,9 +77,9 @@ QBCore.Functions.CreateUseableItem("era_mask", function(source, item)
     local progressActive = lib.callback.await('eraoutfits:IsProgressActive', source)
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -95,9 +95,9 @@ QBCore.Functions.CreateUseableItem("era_kevlar", function(source, item)
     local progressActive = lib.callback.await('eraoutfits:IsProgressActive', source)
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -114,9 +114,9 @@ QBCore.Functions.CreateUseableItem("era_bracelet", function(source, item)
     local progressActive = lib.callback.await('eraoutfits:IsProgressActive', source)
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -132,9 +132,9 @@ QBCore.Functions.CreateUseableItem("era_shoes", function(source, item)
     local progressActive = lib.callback.await('eraoutfits:IsProgressActive', source)
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -151,9 +151,9 @@ QBCore.Functions.CreateUseableItem("era_decal", function(source, item)
     local progressActive = lib.callback.await('eraoutfits:IsProgressActive', source)
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -171,9 +171,9 @@ QBCore.Functions.CreateUseableItem("era_glasses", function(source, item)
 
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -190,9 +190,9 @@ QBCore.Functions.CreateUseableItem("era_watch", function(source, item)
     local progressActive = lib.callback.await('eraoutfits:IsProgressActive', source)
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -209,9 +209,9 @@ QBCore.Functions.CreateUseableItem("era_para", function(source, item)
 
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -228,9 +228,9 @@ QBCore.Functions.CreateUseableItem("era_hat", function(source, item)
     local progressActive = lib.callback.await('eraoutfits:IsProgressActive', source)
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -247,9 +247,9 @@ QBCore.Functions.CreateUseableItem("era_ears", function(source, item)
 
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end
@@ -265,9 +265,9 @@ QBCore.Functions.CreateUseableItem("era_outfit", function(source, item)
 
     if IsPed == "unknown" or progressActive then
         if IsPed == "unknown" then
-            TriggerClientEvent('QBCore:Notify', source, "Ped cant use clothes !", "error")
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.pederror, "error")
         else
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+            TriggerClientEvent('QBCore:Notify', source, Locales.notif.busy, "error")
         end
         return 
     end

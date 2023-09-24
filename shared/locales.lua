@@ -1,4 +1,4 @@
--- /!\ WARNING : manual localizations wil lbe required in qb-radialmenu config.lua and app.js of your inventory.
+-- /!\ WARNING : manual localizations will be required in qb-radialmenu config.lua and app.js of your inventory.
 
 if Config.Lang == "en" then
 
@@ -8,7 +8,6 @@ Locales = {
         error = 'Error',
         cancel = 'Cancelled',
         removed = 'Removed !',
-
         pederror = 'Peds can\'t remove clothes!',
         pedprops = 'Peds can\'t remove props !',
 
@@ -20,6 +19,12 @@ Locales = {
         donthave = 'You dont have',
         onyou = 'on you',
     },
+
+    progressbar = { --Only if you use progressbar
+        removing = "Removing...",
+        wearing = "Dressing up...",
+    },
+
     hair = {
         saved = "Haircut saved",
         nohaircut = "Save your haircut before switching",

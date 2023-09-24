@@ -1,4 +1,4 @@
-Config                  = {}
+Config = {}
 
 Config.Lang = "en" ---Availables : en, fr / Default : en
 

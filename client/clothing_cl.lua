@@ -899,4 +899,40 @@ end
         RemoveAll("all")
     end)
 
+    RegisterNetEvent('eraoutfits:client:getoutfit')
+    AddEventHandler('eraoutfits:client:getoutfit', function()
+        local playerPed = PlayerPedId()
 
+        local topDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("top"))
+        local topTexture = GetPedTextureVariation(playerPed, GetClothSlot("top"))
+        local underDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("shirt"))
+        local underTexture = GetPedTextureVariation(playerPed, GetClothSlot("shirt"))
+        local glovesDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("gloves"))
+        local glovesTexture = GetPedTextureVariation(playerPed, GetClothSlot("gloves"))
+
+        local pantsDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("pant"))
+        local pantsTexture = GetPedTextureVariation(playerPed, GetClothSlot("pant"))
+
+        local bagsDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("bags"))
+        local bagsTexture = GetPedTextureVariation(playerPed, GetClothSlot("bags"))
+
+        local kevlarDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("kevlar"))
+        local kevlarTexture = GetPedTextureVariation(playerPed, GetClothSlot("kevlar"))
+
+        local shoesDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("shoes"))
+        local shoesTexture = GetPedTextureVariation(playerPed, GetClothSlot("shoes"))
+
+        local chainsDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("chains"))
+        local chainsTexture = GetPedTextureVariation(playerPed, GetClothSlot("chains"))
+
+        local decalsDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("decals"))
+        local decalsTexture = GetPedTextureVariation(playerPed, GetClothSlot("decals"))
+
+        local maskDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("mask"))
+        local maskTexture = GetPedTextureVariation(playerPed, GetClothSlot("mask"))
+
+
+        TriggerServerEvent('eraoutfits:server:receiveoutfit', topDrawable, topTexture, underDrawable, underTexture, glovesDrawable, glovesTexture, kevlarDrawable, kevlarTexture, shoesDrawable, shoesTexture, chainsDrawable, chainsTexture, decalsDrawable, decalsTexture, maskDrawable, maskTexture, pantsDrawable, pantsTexture, bagsDrawable, bagsTexture)
+
+    end)
+   

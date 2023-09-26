@@ -75,7 +75,7 @@ local ItemData = {}
             }) then
                 contentFunc()
             else
-                QBCore.Functions.Notify(Locales.notif.cancel, 'success')
+                QBCore.Functions.Notify(Locales.notif.cancel, 'error')
             end
         elseif Config.ProgressBar == "ox" then
             if lib.progressBar({
@@ -90,7 +90,7 @@ local ItemData = {}
             }) then 
                 contentFunc()                 
             else
-                QBCore.Functions.Notify(Locales.notif.cancel, 'success')
+                QBCore.Functions.Notify(Locales.notif.cancel, 'error')
             end
         elseif Config.ProgressBar == "qb" then
             exports['progressbar']:Progress({
@@ -114,7 +114,7 @@ local ItemData = {}
                 if not cancelled then
                     contentFunc()                 
                 else
-                    QBCore.Functions.Notify(Locales.notif.cancel, 'success')
+                    QBCore.Functions.Notify(Locales.notif.cancel, 'error')
                 end
             end)
         end
@@ -207,45 +207,41 @@ local ItemData = {}
 
 
 function GetSwitchAnim(type) -- By the type of clothing, launch a different animation
-        if Config.ProgressBar == "qb" then
-            local dictionnary = animDict
-            local animation = "anim"
-        else 
-            local dictionnary = "animDict" 
-            local animation = "anim"
-        end
-    if Config.ProgressBar == "qb" then
+    local animConfig = Config.Anims[type]
 
+    if Config.ProgressBar == "qb" then    
+
+        if animConfig then
+            return {
+                animDict = animConfig.AnimDict,
+                anim = animConfig.Anim
+            }
+        else
+            return {
+                animDict = 'clothingtie',
+                anim = 'try_tie_positive_a'
+            }
+        end   
     else
-            if type == "mask" or type == "hat" then
-                return {
-                    dict = 'misscommon@std_take_off_masks',
-                    clip = 'take_off_mask_ps'
-                }
-            elseif type == "glasses" then
-                return {
-                    dict = 'clothingspecs',
-                    clip = 'take_off'
-                }
-            elseif type == "outfit" then
-                return {
-                    dict = 'mp_safehouseshower@male@',
-                    clip = 'male_shower_idle_c'
-                }
-            else
-                return {
-                    dict = 'clothingtie',
-                    clip = 'try_tie_positive_a'
-                }
-            end
+        if animConfig then
+            return {
+                dict  = animConfig.AnimDict,
+                clip  = animConfig.Anim
+            }
+        else
+            return {
+                dict = 'clothingtie',
+                clip  = 'try_tie_positive_a'
+            }
+        end   
     end
 end
 
     function GetSwitchTime(type)
-        if type == "mask" or type == "chains" or type == "glasses" or type == "hat" then
-            return math.random(400, 700)
-        elseif type == "outfit" then
-                return math.random(6000, 8000)
+    local timeConfig = Config.Duration[type]
+
+        if timeConfig then
+            return timeConfig
         else
             return math.random(500, 800)
         end
@@ -392,7 +388,7 @@ end
                     QBCore.Functions.Notify(Locales.notif.removed, 'success')
                     TriggerEvent('eraoutfits:client:syncClothes')
                 else
-                    QBCore.Functions.Notify(Locales.notif.cancel, 'success')
+                    QBCore.Functions.Notify(Locales.notif.cancel, 'error')
                 end
             end)
         end
@@ -661,7 +657,7 @@ end
                         TriggerEvent('eraoutfits:client:syncClothes')
                     end
                 else
-                    QBCore.Functions.Notify(Locales.notif.cancel, 'success')
+                    QBCore.Functions.Notify(Locales.notif.cancel, 'error')
                 end
             end)
         end

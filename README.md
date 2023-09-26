@@ -1,3 +1,5 @@
+Please consider donating (link to the bottom) ! ♥
+
 # era-outfits
 Clothing in Inventory for QB-Core, featuring outfit management and alternatives haircuts for your players
 
@@ -181,9 +183,13 @@ TriggerServerEvent("illenium-appearance:server:saveAppearance", appearance)
 end)
 ```
 
-To avoid outfit duplication, remove the load/save outfit menu by commenting the lines 558 to 587 in client.lua. You also could add a bill every time a player load an outfit. 
+At the top of RegisterNetEvent("illenium-appearance:client:changeOutfit", function(data) (line 646), add this :
+```lua
+    TriggerEvent("eraoutfits:client:getoutfit")
+    TriggerServerEvent("illenium-appearance:server:chargeCustomer", "clothing")
+```
 
-**Every clothing shop should work (like base clothing shop of qb), just try and see.**
+Every clothing shop should work (like base clothing shop of qb), just try and see. Im not supporting any of these cuz im not familier with
 
 
 
@@ -404,4 +410,7 @@ If you dont want Alternative Hairs for any reason, you can remove them by removi
 
 
 # Donations
+
+
+
 [![kofi](https://user-images.githubusercontent.com/7586345/125668092-55af2a45-aa7d-4795-93ed-de0a9a2828c5.png)](https://ko-fi.com/erazaya)

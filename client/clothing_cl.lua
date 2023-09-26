@@ -1,6 +1,24 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local ItemData = {}
 
+    lib.callback.register('eraoutfits:IsProgressActive', function()
+        if Config.Progressbar == "ox" or Config.Progressbar == "circle" then
+        local progressActive = lib.progressActive()        
+        elseif Config.Progressbar == "qb" then
+        local progressActive = exports["progressbar"]:isDoingSomething()
+        end
+        return progressActive
+    end)
+
+    function IsProgressActive()
+        if Config.Progressbar == "ox" or Config.Progressbar == "circle" then
+            local progressActive = lib.progressActive()        
+            elseif Config.Progressbar == "qb" then
+            local progressActive = exports["progressbar"]:isDoingSomething()
+            end
+            return progressActive   
+    end
+
 
     local clothslot = {
         "kevlar",
@@ -40,6 +58,69 @@ local ItemData = {}
         return false
     end
 
+    function ProgressBar(config, text, contentFunc)
+        local usedAnim = GetSwitchAnim(config)
+        local SwitchTime = GetSwitchTime(config)
+    
+        if Config.ProgressBar == "circle" then
+            if lib.progressCircle({
+                duration = SwitchTime,
+                position = 'center',
+                useWhileDead = false,
+                canCancel = true,
+                disable = {
+                    car = true,
+                },
+                anim = usedAnim,
+            }) then
+                contentFunc()
+            else
+                QBCore.Functions.Notify(Locales.notif.cancel, 'error')
+            end
+        elseif Config.ProgressBar == "ox" then
+            if lib.progressBar({
+                duration = SwitchTime,
+                label = text,
+                useWhileDead = false,
+                canCancel = true,
+                disable = {
+                    car = true,
+                },
+                anim = usedAnim,
+            }) then 
+                contentFunc()                 
+            else
+                QBCore.Functions.Notify(Locales.notif.cancel, 'error')
+            end
+        elseif Config.ProgressBar == "qb" then
+            exports['progressbar']:Progress({
+                name = "eracloth",
+                duration = SwitchTime,
+                label = text,
+                useWhileDead = false,
+                canCancel = true,
+                controlDisables = {
+                    disableMovement = false,
+                    disableCarMovement = false,
+                    disableMouse = false,
+                    disableCombat = true,    
+                },
+                animation = {
+                    anim = usedAnim,
+                },
+                prop = {},
+                propTwo = {}
+            }, function(cancelled)
+                if not cancelled then
+                    contentFunc()                 
+                else
+                    QBCore.Functions.Notify(Locales.notif.cancel, 'error')
+                end
+            end)
+        end
+    end
+    
+    
     local ClothSlots = {
         ["kevlar"] = 9,
         ["shoes"] = 6,
@@ -125,35 +206,42 @@ local ItemData = {}
 
 
 
-    function GetSwitchAnim(type) --By the type of clothing, launch a different animation
-        if type == "mask" or type == "hat" then
+function GetSwitchAnim(type) -- By the type of clothing, launch a different animation
+    local animConfig = Config.Anims[type]
+
+    if Config.ProgressBar == "qb" then    
+
+        if animConfig then
             return {
-                dict = 'misscommon@std_take_off_masks',
-                clip = 'take_off_mask_ps'
+                animDict = animConfig.AnimDict,
+                anim = animConfig.Anim
             }
-        elseif type == "glasses" then
+        else
             return {
-                dict = 'clothingspecs',
-                clip = 'take_off'
+                animDict = 'clothingtie',
+                anim = 'try_tie_positive_a'
             }
-         elseif type == "outfit" then
-                 return {
-                     dict = 'mp_safehouseshower@male@',
-                     clip = 'male_shower_idle_c'
-             }
+        end   
+    else
+        if animConfig then
+            return {
+                dict  = animConfig.AnimDict,
+                clip  = animConfig.Anim
+            }
         else
             return {
                 dict = 'clothingtie',
-                clip = 'try_tie_positive_a'
+                clip  = 'try_tie_positive_a'
             }
-        end
+        end   
     end
+end
 
     function GetSwitchTime(type)
-        if type == "mask" or type == "chains" or type == "glasses" or type == "hat" then
-            return math.random(400, 700)
-        elseif type == "outfit" then
-                return math.random(6000, 8000)
+    local timeConfig = Config.Duration[type]
+
+        if timeConfig then
+            return timeConfig
         else
             return math.random(500, 800)
         end
@@ -181,26 +269,18 @@ local ItemData = {}
         local id = GetClothID(type)
         local color = GetClothColor(type)
         local slot = GetClothSlot(type)
+        local progress = IsProgressActive() 
 
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         else
             if playerGender == "unknown" then
-                QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+                QBCore.Functions.Notify(Locales.notif.pederror, 'success')
                 return
             end
         
 
-        if lib.progressCircle({
-                duration = SwitchTime,
-                position = 'center',
-                useWhileDead = false,
-                canCancel = true,
-                disable = {
-                    car = true,
-                },
-                anim = usedAnim,
-            }) then
+        ProgressBar(type, Locales.progressbar.removing, function()
                 if type == "pant" then
                     TriggerServerEvent('eraoutfits:server:receiveclothes', type, id, color)
 
@@ -209,7 +289,7 @@ local ItemData = {}
                     elseif playerGender == "male" then
                         SetPedComponentVariation(playerPed, 4, 61, 0, 0)
                     end
-                    QBCore.Functions.Notify("Removed !", 'success')
+                    QBCore.Functions.Notify(Locales.notif.removed, 'success')
                     TriggerEvent('eraoutfits:client:syncClothes')
                 elseif type == "shirt" then
                     local topDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("top"))
@@ -231,7 +311,7 @@ local ItemData = {}
                         SetPedComponentVariation(playerPed, 8, 15, 0, 0)
                         SetPedComponentVariation(playerPed, 3, 15, 0, 0)
                     end
-                    QBCore.Functions.Notify("Removed !", 'success')
+                    QBCore.Functions.Notify(Locales.notif.removed, 'success')
                     TriggerEvent('eraoutfits:client:syncClothes')
                 elseif type == "shoes" then
     
@@ -242,13 +322,13 @@ local ItemData = {}
                     elseif playerGender == "male" then
                         SetPedComponentVariation(playerPed, 6, 34, 0, 0)
                     end
-                    QBCore.Functions.Notify("Removed !", 'success')
+                    QBCore.Functions.Notify(Locales.notif.removed, 'success')
                     TriggerEvent('eraoutfits:client:syncClothes')
                 elseif type == "chains" or type == "mask" or type == "bags" or type == "decals" or type == "kevlar" then
                     TriggerServerEvent('eraoutfits:server:receiveclothes', type, id, color)
     
                     SetPedComponentVariation(playerPed, slot, 0, 0, 0)
-                    QBCore.Functions.Notify("Removed !", 'success')
+                    QBCore.Functions.Notify(Locales.notif.removed, 'success')
                     TriggerEvent('eraoutfits:client:syncClothes')
                 elseif type == "outfit" then
                     local topDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("top"))
@@ -305,24 +385,25 @@ local ItemData = {}
                     SetPedComponentVariation(playerPed, GetClothSlot("decals"), 0, 0, 0)
                     SetPedComponentVariation(playerPed, GetClothSlot("mask"), 0, 0, 0)
 
-                    QBCore.Functions.Notify("Removed !", 'success')
+                    QBCore.Functions.Notify(Locales.notif.removed, 'success')
                     TriggerEvent('eraoutfits:client:syncClothes')
                 else
-                    QBCore.Functions.Notify("Cancelled.", 'error')
+                    QBCore.Functions.Notify(Locales.notif.cancel, 'error')
                 end
-            end
+            end)
         end
     end
 
     function RemoveAll(class)
         local playerPed = PlayerPedId()
         local playerGender = GetPlayerGender(source)
+        local progress = IsProgressActive() 
 
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         else
             if playerGender == "unknown" then
-                QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+                QBCore.Functions.Notify(Locales.notif.pederror, 'success')
                 return
             end
                 if class == "all" then
@@ -432,46 +513,25 @@ local ItemData = {}
     
 
     function RemovePlayerProps(type)
-            local source = source
-            local playerPed = PlayerPedId()
-            local playerGender = GetPlayerGender(source)
-            local usedAnim = GetSwitchAnim(type)
-            local SwitchTime = GetSwitchTime(type)
-            local pslot = GetPropSlot(type)
-            local Props = IsProps(type)
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
-        else
-            if playerGender == "unknown" then
-                    QBCore.Functions.Notify("Peds can't remove props!", 'success')
-                    return
-            end
+        local source = source
+        local playerPed = PlayerPedId()
+        local playerGender = GetPlayerGender(source)
+        local pslot = GetPropSlot(type)
+        local Props = IsProps(type)
 
-            if lib.progressCircle({
-                    duration = SwitchTime,
-                    position = 'center',
-                    useWhileDead = false,
-                    canCancel = true,
-                    disable = {
-                        car = true,
-                    },
-                    anim = usedAnim,
-                }) then
-
+            ProgressBar(type, Locales.progressbar.removing, function()
                 if Props then    
                     local id = GetPedPropIndex(playerPed, pslot)
                     local color = GetPedPropTextureIndex(playerPed, pslot)
-                        ClearPedProp(playerPed, pslot)
-                        TriggerServerEvent('eraoutfits:server:receiveclothes', type, id, color)     
+                    ClearPedProp(playerPed, pslot)
+                    TriggerServerEvent('eraoutfits:server:receiveclothes', type, id, color)     
                 else 
-                    QBCore.Functions.Notify("You dont have : " .. type .. " on you !", 'success')
+                    QBCore.Functions.Notify(Locales.notif.donthave.." "..type.." "..Locales.notif.onyou, 'error')
                 end
-
-                    QBCore.Functions.Notify("Removed !", 'success')
-                    TriggerEvent('eraoutfits:client:syncClothes')
-                end
-            end
+            end)
+    
+            QBCore.Functions.Notify(Locales.notif.removed, 'success')
+            TriggerEvent('eraoutfits:client:syncClothes')
         end
 
     RegisterNetEvent('eraoutfits:client:switch')
@@ -479,36 +539,24 @@ local ItemData = {}
         local source = source
         local playerPed = PlayerPedId()
         local playerGender = GetPlayerGender(source)
-        local usedAnim = GetSwitchAnim(type)
-        local SwitchTime = GetSwitchTime(type)
         local Cloth = IsCloth(type)
         local Props = IsProps(type)
-
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         else
             if playerGender == "unknown" then
-                QBCore.Functions.Notify("Peds can't put clothes!", 'success')
+                QBCore.Functions.Notify(Locales.notif.pederror, 'success')
                 return
             end
 
-        if lib.progressCircle({
-                duration = SwitchTime,
-                position = 'center',
-                useWhileDead = false,
-                canCancel = true,
-                disable = {
-                    car = true,
-                },
-                anim = usedAnim,
-            }) then
-            
+            ProgressBar(type, Locales.progressbar.wearing, function()
                 if Cloth then
                     local slot = GetClothSlot(type)
                     local id = GetClothID(type)
                     local color = GetClothColor(type)
 
-                    QBCore.Functions.Notify("Done !", 'success')
+                    QBCore.Functions.Notify(Locales.notif.done, 'success')
                     if IsPlayerInUnderwear(type) then
                         SetPedComponentVariation(playerPed, slot, ItemData.info.id, ItemData.info.color, 0)
                         TriggerEvent('eraoutfits:client:syncClothes')
@@ -523,7 +571,7 @@ local ItemData = {}
                     local pid = GetPropsID(type)
                     local pcolor = GetPropsColor(type)
 
-                    QBCore.Functions.Notify("Done !", 'success')
+                    QBCore.Functions.Notify(Locales.notif.done, 'success')
 
                 if pid == -1 then
                         SetPedPropIndex(playerPed, pslot, ItemData.info.id, ItemData.info.color, true)
@@ -542,7 +590,7 @@ local ItemData = {}
                 local glovesDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("gloves"))
                 local glovesTexture = GetPedTextureVariation(playerPed, GetClothSlot("gloves"))
     
-                QBCore.Functions.Notify("Done !", 'success')
+                QBCore.Functions.Notify(Locales.notif.done, 'success')
 
                 if IsPlayerInUnderwear("shirt") then
                     SetPedComponentVariation(playerPed, 11, ItemData.info.idtop, ItemData.info.colortop, 0)
@@ -579,7 +627,7 @@ local ItemData = {}
                 local maskDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("mask"))
                 local maskTexture = GetPedTextureVariation(playerPed, GetClothSlot("mask"))
         
-                    QBCore.Functions.Notify("Done !", 'success')
+                    QBCore.Functions.Notify(Locales.notif.done, 'success')
     
                     if IsPlayerInUnderwear("all") then
                         SetPedComponentVariation(playerPed, GetClothSlot("top"), ItemData.info.idtop, ItemData.info.colortop, 0)
@@ -609,9 +657,9 @@ local ItemData = {}
                         TriggerEvent('eraoutfits:client:syncClothes')
                     end
                 else
-                    QBCore.Functions.Notify("Cancelled.", 'error')
+                    QBCore.Functions.Notify(Locales.notif.cancel, 'error')
                 end
-            end
+            end)
         end
     end)
 
@@ -623,13 +671,15 @@ local ItemData = {}
     RegisterNetEvent('eraoutfits:client:pant')
     AddEventHandler('eraoutfits:client:pant', function()
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive()
+        
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif IsPlayerInUnderwear("pant") then
-            QBCore.Functions.Notify("You've already removed it.", 'error')
+            QBCore.Functions.Notify(Locales.notif.alremoved, 'success')
         else
             SetPlayerInUnderwear("pant")
         end
@@ -638,13 +688,14 @@ local ItemData = {}
     RegisterNetEvent('eraoutfits:client:shirt')
     AddEventHandler('eraoutfits:client:shirt', function()
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif IsPlayerInUnderwear("shirt") then
-            QBCore.Functions.Notify("You've already removed it.", 'error')
+            QBCore.Functions.Notify(Locales.notif.alremoved, 'success')
         else
             SetPlayerInUnderwear("shirt")
         end
@@ -653,13 +704,14 @@ local ItemData = {}
     RegisterNetEvent('eraoutfits:client:chains')
     AddEventHandler('eraoutfits:client:chains', function()
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif IsPlayerInUnderwear("chains") then
-            QBCore.Functions.Notify("You've already removed it.", 'error')
+            QBCore.Functions.Notify(Locales.notif.alremoved, 'success')
         else
             SetPlayerInUnderwear("chains")
         end
@@ -668,13 +720,14 @@ local ItemData = {}
     RegisterNetEvent('eraoutfits:client:shoes')
     AddEventHandler('eraoutfits:client:shoes', function()
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif IsPlayerInUnderwear("shoes") then
-            QBCore.Functions.Notify("You've already removed it.", 'error')
+            QBCore.Functions.Notify(Locales.notif.alremoved, 'success')
         else
             SetPlayerInUnderwear("shoes")
         end
@@ -683,13 +736,14 @@ local ItemData = {}
     RegisterNetEvent('eraoutfits:client:mask')
     AddEventHandler('eraoutfits:client:mask', function()
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif IsPlayerInUnderwear("mask") then
-            QBCore.Functions.Notify("You've already removed it.", 'error')
+            QBCore.Functions.Notify(Locales.notif.alremoved, 'success')
         else
             SetPlayerInUnderwear("mask")
         end
@@ -698,13 +752,14 @@ local ItemData = {}
     RegisterNetEvent('eraoutfits:client:decals')
     AddEventHandler('eraoutfits:client:decals', function()
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif IsPlayerInUnderwear("decals") then
-            QBCore.Functions.Notify("You've already removed it.", 'error')
+            QBCore.Functions.Notify(Locales.notif.alremoved, 'success')
         else
             SetPlayerInUnderwear("decals")
         end
@@ -714,13 +769,14 @@ local ItemData = {}
     RegisterNetEvent('eraoutfits:client:bags')
     AddEventHandler('eraoutfits:client:bags', function()
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif IsPlayerInUnderwear("bags") then
-            QBCore.Functions.Notify("You've already removed it.", 'error')
+            QBCore.Functions.Notify(Locales.notif.alremoved, 'success')
         else
             SetPlayerInUnderwear("bags")
         end
@@ -729,13 +785,14 @@ local ItemData = {}
     RegisterNetEvent('eraoutfits:client:kevlar')
     AddEventHandler('eraoutfits:client:kevlar', function()
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif IsPlayerInUnderwear("kevlar") then
-            QBCore.Functions.Notify("You've already removed it.", 'error')
+            QBCore.Functions.Notify(Locales.notif.alremoved, 'success')
         else
             SetPlayerInUnderwear("kevlar")
         end
@@ -746,13 +803,14 @@ local ItemData = {}
         local playerPed = PlayerPedId()
         local glassesID = GetPedPropIndex(playerPed, 1)
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif glassesID == -1  then
-            QBCore.Functions.Notify("You're not wearing glasses !", 'error')
+            QBCore.Functions.Notify(Locales.notif.notwear, 'error')
         else
             RemovePlayerProps("glasses")
         end
@@ -762,15 +820,15 @@ local ItemData = {}
     AddEventHandler('eraoutfits:client:watch', function()
         local playerPed = PlayerPedId()
         local watchID = GetPedPropIndex(playerPed, 6)
- 
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif watchID == -1  then
-            QBCore.Functions.Notify("You're not wearing any watch !", 'error')
+            QBCore.Functions.Notify(Locales.notif.notwear, 'error')
         else
             RemovePlayerProps("watch")
         end
@@ -781,13 +839,14 @@ local ItemData = {}
         local playerPed = PlayerPedId()
         local braceletID = GetPedPropIndex(playerPed, 7) 
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif braceletID == -1  then
-            QBCore.Functions.Notify("You're not wearing any bracelet !", 'error')
+            QBCore.Functions.Notify(Locales.notif.notwear, 'error')
         else
             RemovePlayerProps("bracelet")
         end
@@ -798,13 +857,14 @@ local ItemData = {}
         local playerPed = PlayerPedId()
         local hatID = GetPedPropIndex(playerPed, 0) 
         local playerGender = GetPlayerGender()
-    
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        local progress = IsProgressActive() 
+
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif hatID == -1  then
-            QBCore.Functions.Notify("You're not wearing any hat !", 'error')
+            QBCore.Functions.Notify(Locales.notif.notwear, 'error')
         else
             RemovePlayerProps("hat")
         end
@@ -816,13 +876,14 @@ local ItemData = {}
         local playerPed = PlayerPedId()
         local playerGender = GetPlayerGender() 
         local earsID = GetPedPropIndex(playerPed, 2) 
+        local progress = IsProgressActive() 
 
-        if lib.progressActive() then
-            QBCore.Functions.Notify("You are already doing something!", 'error')
+        if progress then
+            QBCore.Functions.Notify(Locales.notif.busy, 'success')
         elseif playerGender == "unknown" then
-            QBCore.Functions.Notify("Peds can't remove clothes!", 'success')
+            QBCore.Functions.Notify(Locales.notif.pederror, 'success')
         elseif earsID == -1  then
-            QBCore.Functions.Notify("You're not wearing any ears accessories !", 'error')
+            QBCore.Functions.Notify(Locales.notif.notwear, 'error')
         else
             RemovePlayerProps("ears")
         end
@@ -838,7 +899,40 @@ local ItemData = {}
         RemoveAll("all")
     end)
 
-    lib.callback.register('eraoutfits:IsProgressActive', function()
-        local progressActive = lib.progressActive()        
-        return progressActive
+    RegisterNetEvent('eraoutfits:client:getoutfit')
+    AddEventHandler('eraoutfits:client:getoutfit', function()
+        local playerPed = PlayerPedId()
+
+        local topDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("top"))
+        local topTexture = GetPedTextureVariation(playerPed, GetClothSlot("top"))
+        local underDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("shirt"))
+        local underTexture = GetPedTextureVariation(playerPed, GetClothSlot("shirt"))
+        local glovesDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("gloves"))
+        local glovesTexture = GetPedTextureVariation(playerPed, GetClothSlot("gloves"))
+
+        local pantsDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("pant"))
+        local pantsTexture = GetPedTextureVariation(playerPed, GetClothSlot("pant"))
+
+        local bagsDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("bags"))
+        local bagsTexture = GetPedTextureVariation(playerPed, GetClothSlot("bags"))
+
+        local kevlarDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("kevlar"))
+        local kevlarTexture = GetPedTextureVariation(playerPed, GetClothSlot("kevlar"))
+
+        local shoesDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("shoes"))
+        local shoesTexture = GetPedTextureVariation(playerPed, GetClothSlot("shoes"))
+
+        local chainsDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("chains"))
+        local chainsTexture = GetPedTextureVariation(playerPed, GetClothSlot("chains"))
+
+        local decalsDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("decals"))
+        local decalsTexture = GetPedTextureVariation(playerPed, GetClothSlot("decals"))
+
+        local maskDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("mask"))
+        local maskTexture = GetPedTextureVariation(playerPed, GetClothSlot("mask"))
+
+
+        TriggerServerEvent('eraoutfits:server:receiveoutfit', topDrawable, topTexture, underDrawable, underTexture, glovesDrawable, glovesTexture, kevlarDrawable, kevlarTexture, shoesDrawable, shoesTexture, chainsDrawable, chainsTexture, decalsDrawable, decalsTexture, maskDrawable, maskTexture, pantsDrawable, pantsTexture, bagsDrawable, bagsTexture)
+
     end)
+   

@@ -11,7 +11,7 @@ AddEventHandler('eraoutfits:server:SaveAltHair', function(drawableVariations)
 
     MySQL.Async.insert('INSERT INTO `playershair` (citizenid, althair) VALUES (?, ?) ON DUPLICATE KEY UPDATE althair = ?', {citizenid, althair, althair}, function(affectedRows)
         if affectedRows > 0 then
-            TriggerClientEvent('QBCore:Notify', source, "Haircut saved", 'success')
+            TriggerClientEvent('QBCore:Notify', source, Locales.hair.saved, 'success')
         else
         end
     end)
@@ -27,7 +27,7 @@ AddEventHandler('eraoutfits:server:SaveBaseHair', function(drawableVariations)
 
     MySQL.Async.insert('INSERT INTO `playershair` (citizenid, basehair) VALUES (?, ?) ON DUPLICATE KEY UPDATE basehair = ?', {citizenid, basehair, basehair}, function(affectedRows)
         if affectedRows > 0 then
-            TriggerClientEvent('QBCore:Notify', source, "Haircut saved", 'success')
+            TriggerClientEvent('QBCore:Notify', source, Locales.hair.saved, 'success')
         else
         end
     end)

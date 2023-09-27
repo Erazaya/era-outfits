@@ -94,7 +94,7 @@ local ItemData = {}
             end
         elseif Config.ProgressBar == "qb" then
             exports['progressbar']:Progress({
-                name = "eracloth",
+                name = "era_progressbar",
                 duration = SwitchTime,
                 label = text,
                 useWhileDead = false,
@@ -105,9 +105,7 @@ local ItemData = {}
                     disableMouse = false,
                     disableCombat = true,    
                 },
-                animation = {
-                    anim = usedAnim,
-                },
+                animation = usedAnim,
                 prop = {},
                 propTwo = {}
             }, function(cancelled)
@@ -210,28 +208,32 @@ function GetSwitchAnim(type) -- By the type of clothing, launch a different anim
     local animConfig = Config.Anims[type]
 
     if Config.ProgressBar == "qb" then    
-
+            
         if animConfig then
             return {
-                animDict = animConfig.AnimDict,
-                anim = animConfig.Anim
+                animDict  = animConfig.AnimDict,
+                anim  = animConfig.Anim,
+                flags = 49,
             }
         else
             return {
                 animDict = 'clothingtie',
-                anim = 'try_tie_positive_a'
+                anim = 'try_tie_positive_a',
+                flags = 49,
             }
         end   
     else
         if animConfig then
             return {
                 dict  = animConfig.AnimDict,
-                clip  = animConfig.Anim
+                clip  = animConfig.Anim,
+                flag = 49
             }
         else
             return {
                 dict = 'clothingtie',
-                clip  = 'try_tie_positive_a'
+                clip  = 'try_tie_positive_a',
+                flag = 49
             }
         end   
     end

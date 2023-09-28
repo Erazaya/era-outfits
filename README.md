@@ -402,9 +402,8 @@ in html > js > app.js, near line 631 at FormatItemInfo, add this :
 
 
 # **Configuration**
-Switching Clothes timing can be changed in clothing_cl.lua at function GetSwitchTime
 
-Switching Animations can be changed in clothing_cl.lua at function GetSwitchAnim
+translation in locales.lua, otherwise in config.lua
 
 If you dont want Alternative Hairs for any reason, you can remove them by removing the lines in qb-radialmenu.
 

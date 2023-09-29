@@ -174,14 +174,6 @@ Install and ensure era-outfits in your server.cfg like any scripts.
 ```
 
 3. **Illenium-Appearance**
-add this anywhere in client.lua
-```lua
-RegisterNetEvent('eraoutfits:client:syncClothes')
-AddEventHandler('eraoutfits:client:syncClothes', function()
-local appearance = client.getPedAppearance(cache.ped)
-TriggerServerEvent("illenium-appearance:server:saveAppearance", appearance)
-end)
-```
 
 At the top of RegisterNetEvent("illenium-appearance:client:changeOutfit", function(data) (line 646), add this :
 ```lua
@@ -189,7 +181,7 @@ At the top of RegisterNetEvent("illenium-appearance:client:changeOutfit", functi
     TriggerServerEvent("illenium-appearance:server:chargeCustomer", "clothing")
 ```
 
-Every clothing shop should work (like base clothing shop of qb), just try and see. Im not supporting any of these cuz im not familier with
+Every clothing shop should work (like base clothing shop of qb), just try and see. Im not supporting any of these cuz im not familiar with
 
 
 

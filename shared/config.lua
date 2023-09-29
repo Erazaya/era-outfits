@@ -10,13 +10,13 @@ Config.Duration = { -- Remove/Wear time, in MS
     hat = math.random(600, 800),
     glasses = math.random(600, 800),
     kevlar = math.random(1400, 1700),
-    shoes = math.random(1800, 2200),
+    shoes = 1200,
     chains = math.random(700, 1500),
     mask = math.random(700, 1100),
     bags = math.random(1100, 1300),
     bracelet = math.random(900, 1200),
     watch = math.random(800, 1200),
-    ears = math.random(600, 800),
+    ears = math.random(850, 935),
     decals = math.random(800, 1300),
     outfit  = math.random(2800, 3300)
 }
@@ -25,9 +25,9 @@ Config.Duration = { -- Remove/Wear time, in MS
 
 Config.Anims = {
     pant = {
-        AnimDict = 'clothingtie',
-        Anim = 'try_tie_positive_a',
-        flag = 33
+        AnimDict = 're@construction',
+        Anim = 'out_of_breath',
+        flag = 51
     },
     shirt = {
         AnimDict = 'clothingtie',
@@ -50,9 +50,9 @@ Config.Anims = {
         flag = 33
     },
     shoes = {
-        AnimDict = 'clothingtie',
-        Anim = 'try_tie_positive_a',
-        flag = 33
+        AnimDict = 'random@domestic',
+        Anim = 'pickup_low',
+        flag = 0
     },
     chains = {
         AnimDict = 'clothingtie',
@@ -75,13 +75,13 @@ Config.Anims = {
         flag = 33
     },  
     watch = {
-        AnimDict = 'clothingtie',
-        Anim = 'try_tie_positive_a',
-        flag = 33
+        AnimDict = 'nmt_3_rcm',
+        Anim = 'cs_nigel_dual',
+        flag = 51
     },  
     ears = {
-        AnimDict = 'clothingtie',
-        Anim = 'try_tie_positive_a',
+        AnimDict = 'mp_cp_stolen_tut',
+        Anim = 'b_think',
         flag = 33
     },  
     decals = {

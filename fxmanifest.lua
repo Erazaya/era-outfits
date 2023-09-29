@@ -18,7 +18,7 @@ client_scripts {
 }
 server_scripts {
     'server/*',
-    '@qb-smallresources/server/logs.lua',
+    --'@qb-smallresources/server/logs.lua',
     '@oxmysql/lib/MySQL.lua',
 }
 

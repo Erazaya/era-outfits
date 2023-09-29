@@ -1,6 +1,19 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local ItemData = {}
 
+       
+local function syncClothes()
+    local pedComponents = exports['illenium-appearance']:getPedComponents(cache.ped)
+    local pedProps = exports['illenium-appearance']:getPedProps(cache.ped)
+
+    exports['illenium-appearance']:setPedComponents(cache.ped, pedComponents)
+    exports['illenium-appearance']:setPedProps(cache.ped,pedProps)
+
+    appearance = exports['illenium-appearance']:getPedAppearance(cache.ped)
+    TriggerServerEvent("illenium-appearance:server:saveAppearance", appearance)
+end
+
+
     lib.callback.register('eraoutfits:IsProgressActive', function()
         if Config.Progressbar == "ox" or Config.Progressbar == "circle" then
         local progressActive = lib.progressActive()        
@@ -292,7 +305,7 @@ end
                         SetPedComponentVariation(playerPed, 4, 61, 0, 0)
                     end
                     QBCore.Functions.Notify(Locales.notif.removed, 'success')
-                    TriggerEvent('eraoutfits:client:syncClothes')
+                    syncClothes()
                 elseif type == "shirt" then
                     local topDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("top"))
                     local topTexture = GetPedTextureVariation(playerPed, GetClothSlot("top"))
@@ -314,7 +327,7 @@ end
                         SetPedComponentVariation(playerPed, 3, 15, 0, 0)
                     end
                     QBCore.Functions.Notify(Locales.notif.removed, 'success')
-                    TriggerEvent('eraoutfits:client:syncClothes')
+                    syncClothes()
                 elseif type == "shoes" then
     
                     TriggerServerEvent('eraoutfits:server:receiveclothes', type, id, color)
@@ -325,13 +338,13 @@ end
                         SetPedComponentVariation(playerPed, 6, 34, 0, 0)
                     end
                     QBCore.Functions.Notify(Locales.notif.removed, 'success')
-                    TriggerEvent('eraoutfits:client:syncClothes')
+                    syncClothes()
                 elseif type == "chains" or type == "mask" or type == "bags" or type == "decals" or type == "kevlar" then
                     TriggerServerEvent('eraoutfits:server:receiveclothes', type, id, color)
     
                     SetPedComponentVariation(playerPed, slot, 0, 0, 0)
                     QBCore.Functions.Notify(Locales.notif.removed, 'success')
-                    TriggerEvent('eraoutfits:client:syncClothes')
+                    syncClothes()
                 elseif type == "outfit" then
                     local topDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("top"))
                     local topTexture = GetPedTextureVariation(playerPed, GetClothSlot("top"))
@@ -388,7 +401,7 @@ end
                     SetPedComponentVariation(playerPed, GetClothSlot("mask"), 0, 0, 0)
 
                     QBCore.Functions.Notify(Locales.notif.removed, 'success')
-                    TriggerEvent('eraoutfits:client:syncClothes')
+                    syncClothes()
                 else
                     QBCore.Functions.Notify(Locales.notif.cancel, 'error')
                 end
@@ -533,7 +546,7 @@ end
             end)
     
             QBCore.Functions.Notify(Locales.notif.removed, 'success')
-            TriggerEvent('eraoutfits:client:syncClothes')
+            syncClothes()
         end
 
     RegisterNetEvent('eraoutfits:client:switch')
@@ -561,12 +574,12 @@ end
                     QBCore.Functions.Notify(Locales.notif.done, 'success')
                     if IsPlayerInUnderwear(type) then
                         SetPedComponentVariation(playerPed, slot, ItemData.info.id, ItemData.info.color, 0)
-                        TriggerEvent('eraoutfits:client:syncClothes')
+                        syncClothes()
                     else
                         TriggerServerEvent('eraoutfits:server:receiveclothes', type, id, color)
                         Citizen.Wait(500)
                         SetPedComponentVariation(playerPed, slot, ItemData.info.id, ItemData.info.color, 0)
-                        TriggerEvent('eraoutfits:client:syncClothes')
+                        syncClothes()
                     end
                 elseif Props then
                     local pslot = GetPropSlot(type)
@@ -577,12 +590,12 @@ end
 
                 if pid == -1 then
                         SetPedPropIndex(playerPed, pslot, ItemData.info.id, ItemData.info.color, true)
-                        TriggerEvent('eraoutfits:client:syncClothes')
+                        syncClothes()
                     else
                         TriggerServerEvent('eraoutfits:server:receiveclothes', type, pid, color)
                         Citizen.Wait(500)
                         SetPedPropIndex(playerPed, pslot, ItemData.info.id, ItemData.info.color, true)
-                        TriggerEvent('eraoutfits:client:syncClothes')
+                        syncClothes()
                 end
             elseif type == "shirt" then
                 local topDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("top"))
@@ -598,14 +611,14 @@ end
                     SetPedComponentVariation(playerPed, 11, ItemData.info.idtop, ItemData.info.colortop, 0)
                     SetPedComponentVariation(playerPed, 8, ItemData.info.idshirt, ItemData.info.colorshirt, 0)
                     SetPedComponentVariation(playerPed, 3, ItemData.info.idgloves, ItemData.info.colorgloves, 0)
-                    TriggerEvent('eraoutfits:client:syncClothes')
+                    syncClothes()
                 else
                     TriggerServerEvent('eraoutfits:server:receiveshirt', topDrawable, topTexture, underDrawable, underTexture, glovesDrawable, glovesTexture)
                     Citizen.Wait(500)
                     SetPedComponentVariation(playerPed, 11, ItemData.info.idtop, ItemData.info.colortop, 0)
                     SetPedComponentVariation(playerPed, 8, ItemData.info.idshirt, ItemData.info.colorshirt, 0)
                     SetPedComponentVariation(playerPed, 3, ItemData.info.idgloves, ItemData.info.colorgloves, 0)
-                    TriggerEvent('eraoutfits:client:syncClothes')
+                    syncClothes()
                 end
             elseif type == "outfit" then
                 local topDrawable = GetPedDrawableVariation(playerPed, GetClothSlot("top"))
@@ -642,7 +655,7 @@ end
                         SetPedComponentVariation(playerPed, GetClothSlot("chains"), ItemData.info.idchains, ItemData.info.colorchains, 0)
                         SetPedComponentVariation(playerPed, GetClothSlot("decals"), ItemData.info.iddecal, ItemData.info.colordecal, 0)
                         SetPedComponentVariation(playerPed, GetClothSlot("mask"), ItemData.info.idmask, ItemData.info.colormask, 0)
-                        TriggerEvent('eraoutfits:client:syncClothes')
+                        syncClothes()
                     else
                         TriggerServerEvent('eraoutfits:server:receiveoutfit', topDrawable, topTexture, underDrawable, underTexture, glovesDrawable, glovesTexture, kevlarDrawable, kevlarTexture, shoesDrawable, shoesTexture, chainsDrawable, chainsTexture, decalsDrawable, decalsTexture, maskDrawable, maskTexture, pantsDrawable, pantsTexture, bagsDrawable, bagsTexture)
                         Citizen.Wait(500)
@@ -656,7 +669,7 @@ end
                         SetPedComponentVariation(playerPed, GetClothSlot("chains"), ItemData.info.idchains, ItemData.info.colorchains, 0)
                         SetPedComponentVariation(playerPed, GetClothSlot("decals"), ItemData.info.iddecal, ItemData.info.colordecal, 0)
                         SetPedComponentVariation(playerPed, GetClothSlot("mask"), ItemData.info.idmask, ItemData.info.colormask, 0)
-                        TriggerEvent('eraoutfits:client:syncClothes')
+                        syncClothes()
                     end
                 else
                     QBCore.Functions.Notify(Locales.notif.cancel, 'error')
@@ -937,4 +950,3 @@ end
         TriggerServerEvent('eraoutfits:server:receiveoutfit', topDrawable, topTexture, underDrawable, underTexture, glovesDrawable, glovesTexture, kevlarDrawable, kevlarTexture, shoesDrawable, shoesTexture, chainsDrawable, chainsTexture, decalsDrawable, decalsTexture, maskDrawable, maskTexture, pantsDrawable, pantsTexture, bagsDrawable, bagsTexture)
 
     end)
-   

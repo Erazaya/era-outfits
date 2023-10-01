@@ -175,7 +175,7 @@ Install and ensure era-outfits in your server.cfg like any scripts.
 
 3. **Illenium-Appearance**
 
-At the top of RegisterNetEvent("illenium-appearance:client:changeOutfit", function(data) (line 646), add this :
+Right under of RegisterNetEvent("illenium-appearance:client:changeOutfit", function(data) (line 646), add this :
 ```lua
     TriggerEvent("eraoutfits:client:getoutfit")
     TriggerServerEvent("illenium-appearance:server:chargeCustomer", "clothing")

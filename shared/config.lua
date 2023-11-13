@@ -1,8 +1,8 @@
 Config = {}
 
-Config.Lang = "en" ---Availables : en, fr / Default : en
+Config.Lang = "en" ---Availables : en, fr, es / Default : en
 
-Config.ProgressBar = "qb" --circle for ox ProgressCircle (Recommended), ox for ox progressbar, qb for qb-progressbar
+Config.ProgressBar = "circle" --circle for ox ProgressCircle (Recommended), ox for ox progressbar, qb for qb-progressbar
 
 Config.Duration = { -- Remove/Wear time, in MS
     pant = math.random(1900, 2400),

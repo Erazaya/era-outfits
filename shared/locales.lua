@@ -75,3 +75,41 @@ elseif Config.Lang == 'fr' then
         }
     }
 end
+
+if Config.Lang == 'es' then -- Translation by RS 
+
+Locales = {
+    notif = {
+        done = 'Hecho !',
+        error = 'Error',
+        cancel = 'Cancelado',
+        removed = 'Eliminado !',
+        pederror = 'Los peds no pueden quitarse la ropa.!',
+        pedprops = 'Los peds no pueden quitar los accesorios. !',
+
+        alremoved = 'Ya lo has eliminado.',
+        notwear = 'No estás usando eso !',
+
+        busy = 'Ya estas haciendo algo!',
+
+        donthave = 'no tienes',
+        onyou = 'en ti',
+    },
+
+    progressbar = { --Only if you use progressbar
+        removing = 'Eliminando...',
+        wearing = 'Vistiendote...',
+    },
+
+    hair = {
+        saved = 'Corte de pelo guardado',
+        nohaircut = 'Guarda tu corte de pelo antes de cambiar',
+
+        manage = 'Cortes de pelo',
+        save1 = 'Peinado 1',
+        save2 = 'Peinado 2',
+        actual = 'Guardado : ', --Dont remove the space at the end
+
+    }
+}
+end

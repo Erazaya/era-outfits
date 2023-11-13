@@ -74,9 +74,8 @@ elseif Config.Lang == 'fr' then
     
         }
     }
-end
-
-if Config.Lang == 'es' then -- Translation by RS 
+    
+elseif Config.Lang == 'es' then -- Translation by RS 
 
 Locales = {
     notif = {
